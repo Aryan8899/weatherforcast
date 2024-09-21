@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import WeatherDisplay from "./components/WeatherDisplay";
+import ForecastDisplay from "./components/ForecastDisplay";
+import CitySearch from "./components/CitySearch";
+import "./App.css"; // Keep this for any custom styles, if needed
 
-function App() {
+const App = () => {
+  const [city, setCity] = useState("New York"); // Default city
+  const [unit, setUnit] = useState("metric"); // Toggle between Celsius and Fahrenheit
+
+  const handleUnitToggle = () => {
+    setUnit((prevUnit) => (prevUnit === "metric" ? "imperial" : "metric"));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-container max-w-6xl mx-auto p-6 bg-gray-50 min-h-screen">
+      <h1 className="text-4xl font-bold text-gray-700 mb-6 text-center">
+        Weather Forecast
+      </h1>
+      <div className="search-bar flex justify-center items-center mb-8">
+        {/* Use CitySearch component to search for a city */}
+        <CitySearch setCity={setCity} />
+      </div>
+      <button
+        className="unit-toggle-button p-3 bg-gray-100 border border-gray-300 rounded-lg mb-8 hover:bg-gray-200 transition-all focus:outline-none"
+        onClick={handleUnitToggle}
+      >
+        Switch to {unit === "metric" ? "Fahrenheit" : "Celsius"}
+      </button>
+      <div className="mb-12">
+        {/* Display weather for the searched city */}
+        <WeatherDisplay city={city} unit={unit} />
+      </div>
+      <ForecastDisplay city={city} unit={unit} />
     </div>
   );
-}
+};
 
 export default App;

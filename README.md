@@ -1,70 +1,108 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Weather Forecast Application
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+This Weather Forecast Application is a React app that displays the current weather and a 5-day weather forecast for any city worldwide. Users can search for cities, view real-time weather conditions, and switch between Celsius and Fahrenheit units for temperature.
 
-### `npm start`
+### Features:
+- Search for a city using the OpenWeather Geocoding API.
+- Display current weather details, including temperature, condition, and icons.
+- Display a 5-day weather forecast with high and low temperatures.
+- Unit toggle between Celsius and Fahrenheit.
+- Consistent error handling for city not found or network errors.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Table of Contents
+- [Installation](#installation)
+- [Usage](#usage)
+- [Components](#components)
+  - [CitySearch](#citysearch-component)
+  - [WeatherDisplay](#weatherdisplay-component)
+  - [ForecastDisplay](#forecastdisplay-component)
+  - [TempToggle](#temptoggle-component)
+- [Error Handling](#error-handling)
+- [Technologies Used](#technologies-used)
+- [License](#license)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Installation
 
-### `npm test`
+To install and run this application locally:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/weather-forecast-app.git
+   ```
 
-### `npm run build`
+2. Navigate to the project directory:
+   ```bash
+   cd weather-forecast-app
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. Obtain your API key from OpenWeather and create a `.env` file at the root of the project:
+   ```
+   REACT_APP_WEATHER_API_KEY=your_openweather_api_key
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+5. Start the development server:
+   ```bash
+   npm start
+   ```
 
-### `npm run eject`
+## Usage
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. Type the name of a city in the search bar.
+2. Click on the `Search` button to fetch the weather and forecast data.
+3. Switch between Celsius and Fahrenheit using the toggle button.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Components
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### CitySearch Component
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+The `CitySearch` component is responsible for searching and suggesting city names from the OpenWeather Geocoding API. When a city is selected or typed in, it triggers the weather fetch.
 
-## Learn More
+#### Props:
+- `setCity`: A function that sets the selected city name to be used for fetching weather and forecast data.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### WeatherDisplay Component
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+This component is responsible for displaying the current weather information for a selected city. It fetches data from the OpenWeather API based on the city name and displays temperature, condition, and an icon.
 
-### Code Splitting
+#### Props:
+- `city`: The selected city name.
+- `unit`: The unit system (metric or imperial) to display the temperature.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### ForecastDisplay Component
 
-### Analyzing the Bundle Size
+This component displays the 5-day forecast for the selected city. It fetches forecast data from the OpenWeather API and displays high and low temperatures along with weather conditions for the next five days.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+#### Props:
+- `city`: The selected city name.
+- `unit`: The unit system (Celsius or Fahrenheit) for displaying temperature.
 
-### Making a Progressive Web App
+### TempToggle Component
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+This component allows the user to switch between Celsius and Fahrenheit for temperature display.
 
-### Advanced Configuration
+#### Props:
+- `isCelsius`: A boolean value indicating if the current unit is Celsius.
+- `toggleUnit`: A function to toggle the unit between Celsius and Fahrenheit.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Error Handling
 
-### Deployment
+The application has consistent error handling across components. If a city is not found or there's a network issue, a relevant error message is shown.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- **City Not Found**: Displays "City not found" when the API cannot locate the city.
+- **Network Error**: Displays "Failed to fetch data" in case of a network issue.
 
-### `npm run build` fails to minify
+## Technologies Used
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **React**: For building the application.
+- **Tailwind CSS**: For styling and responsiveness.
+- **OpenWeather API**: To fetch real-time weather and forecast data.
+- **Debounce**: To limit the API calls while typing in the search input.
+
