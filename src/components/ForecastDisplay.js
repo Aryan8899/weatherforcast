@@ -50,10 +50,26 @@ const ForecastDisplay = ({ city, unit }) => {
     return <div className="loading text-gray-500">Loading forecast...</div>;
   }
 
+  const convertTemperature = (temp, unit) => {
+    if (unit === "imperial") {
+      // If the unit is imperial (Fahrenheit), convert Celsius to Fahrenheit
+      return (temp * 9/5) + 32;
+    }
+    return temp; // If the unit is metric (Celsius), no need to convert
+  };
+
   return (
     <div className="forecast-container grid grid-cols-2 gap-4">
       {forecastData.map((data) => (
-        <ForecastCard key={data.dt} data={data} unit={unit} />
+        <ForecastCard key={data.dt} data={{
+            ...data,
+            main: {
+              ...data.main,
+              temp_max: convertTemperature(data.main.temp_max, unit),
+              temp_min: convertTemperature(data.main.temp_min, unit),
+            },
+          }}
+          unit={unit} />
       ))}
     </div>
   );

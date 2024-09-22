@@ -6,7 +6,7 @@ const ForecastCard = ({ data, unit }) => {
   });
 
   return (
-<div className="forecast-card bg-blue-50 shadow-md p-6 rounded-lg text-center transition-transform transform hover:scale-105">
+<div className="forecast-card bg-blue-100 shadow-md p-6 rounded-lg text-center shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl duration-300 ease-in-out">
   <h3 className="text-lg font-bold text-gray-800">{date}</h3>
   <p className="text-gray-700 mt-2">
     High: {data.main.temp_max}°{unit === "metric" ? "C" : "F"}

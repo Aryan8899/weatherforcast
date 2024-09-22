@@ -15,82 +15,86 @@ const CitySearch = ({ setCity }) => {
   const [search, setSearch] = useState("");
   const [suggestions, setSuggestions] = useState([]); // To store the city suggestions
   const [showSuggestions, setShowSuggestions] = useState(false); // To control dropdown visibility
-
   const searchRef = useRef(null); // Ref to the search input
+
+  // Load cached city if available
+  useEffect(() => {
+    const cachedCity = localStorage.getItem("lastCity");
+    if (cachedCity) {
+      setCity(cachedCity);
+    }
+  }, [setCity]);
+
+  // Save the current city in localStorage
+  useEffect(() => {
+    localStorage.setItem("lastCity", search);
+  }, [search]);
 
   // Function to fetch city suggestions using OpenWeather's Geocoding API
   const fetchCitySuggestions = async (query) => {
     try {
-      if (query.length > 2) { // Only fetch if the input is longer than 2 characters
+      if (query.length > 2) {
         const response = await fetch(
           `https://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&appid=e5304ec8a6785b8bc8bfec1c36a1af93`
         );
         const data = await response.json();
         if (data.length > 0) {
-          setSuggestions(data); // Update suggestions based on API response
-          setShowSuggestions(true); // Show the dropdown
+          setSuggestions(data);
+          setShowSuggestions(true);
         } else {
-          setSuggestions([]); // Clear suggestions if no result is found
-          setShowSuggestions(false); // Hide dropdown if no suggestions are found
+          setSuggestions([]);
+          setShowSuggestions(false);
         }
       } else {
-        setSuggestions([]); // Clear suggestions if the input is too short
-        setShowSuggestions(false); // Hide dropdown if input is too short
+        setSuggestions([]);
+        setShowSuggestions(false);
       }
     } catch (error) {
       console.error("Error fetching city suggestions:", error);
     }
   };
 
-  // Debounced version of the fetch function
   const debouncedFetchCitySuggestions = debounce(fetchCitySuggestions, 300);
 
-  // Function to handle input changes and debounce the API call
   const handleInputChange = (e) => {
     const value = e.target.value;
     setSearch(value);
-
     if (value.trim() === "") {
-      // Immediately clear suggestions and hide the dropdown if input is empty
-      setSuggestions([]); 
+      setSuggestions([]);
       setShowSuggestions(false);
     } else {
-      setShowSuggestions(false); // Force hiding dropdown immediately while fetching
-      debouncedFetchCitySuggestions(value); // Call the debounced version of fetchCitySuggestions
+      setShowSuggestions(false);
+      debouncedFetchCitySuggestions(value);
     }
   };
 
-  // Function to handle the selection of a city from the suggestions
   const handleSuggestionClick = (city) => {
-    setCity(city.name); // Set the selected city as the current city
-    setSearch(""); // Clear the search input
-    setSuggestions([]); // Clear suggestions
-    setShowSuggestions(false); // Hide the suggestions dropdown
+    setCity(city.name);
+    setSearch("");
+    setSuggestions([]);
+    setShowSuggestions(false);
   };
 
-  // Function to handle form submission
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (search.trim() !== "") {
-      setCity(search); // Set the typed city if no suggestion is selected
-      setSuggestions([]); // Clear suggestions
-      setShowSuggestions(false); // Hide the dropdown
+      setCity(search);
+      setSuggestions([]);
+      setShowSuggestions(false);
     } else {
-      setShowSuggestions(false); // Explicitly hide dropdown when input is empty
+      setShowSuggestions(false);
     }
   };
 
-  // Function to hide the dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
-        setShowSuggestions(false); // Hide dropdown when clicking outside the input or dropdown
+        setShowSuggestions(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
 
-    // Cleanup event listener on component unmount
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -104,7 +108,7 @@ const CitySearch = ({ setCity }) => {
           value={search}
           onChange={handleInputChange}
           placeholder="Search for a city"
-          className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-300 w-64 sm:w-64 md:w-64"
+          className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 w-64 sm:w-64 md:w-64"
         />
         <button
           type="submit"
@@ -118,7 +122,7 @@ const CitySearch = ({ setCity }) => {
           <ul className="absolute z-10 bg-white shadow-lg rounded-lg mt-1 max-h-40 overflow-y-auto w-64 left-0 top-full sm:w-64">
             {suggestions.map((suggestion) => (
               <li
-                key={suggestion.lat + suggestion.lon} // Unique key for each suggestion
+                key={suggestion.lat + suggestion.lon}
                 onClick={() => handleSuggestionClick(suggestion)}
                 className="px-4 py-2 hover:bg-gray-200 cursor-pointer text-center"
               >
